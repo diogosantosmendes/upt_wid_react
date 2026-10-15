@@ -1,0 +1,62 @@
+[
+    {
+      "id": "A09FG",
+      "location": "Avenida Dom Afonso Henriques, Coimbra",
+      "available": true
+    },
+    {
+      "id": "B12XY",
+      "location": "Avenida da Liberdade, Lisbon",
+      "available": false
+    },
+    {
+      "id": "C34ZT",
+      "location": "Praça do Comércio, Lisbon",
+      "available": true
+    },
+    {
+      "id": "D56UV",
+      "location": "Rua Augusta, Lisbon",
+      "available": false
+    },
+    {
+      "id": "E78WX",
+      "location": "Avenida dos Aliados, Porto",
+      "available": true
+    },
+    {
+      "id": "F90YZ",
+      "location": "Rua de Santa Catarina, Porto",
+      "available": false
+    },
+    {
+      "id": "G12AB",
+      "location": "Avenida da República, Lisbon",
+      "available": true
+    },
+    {
+      "id": "H34CD",
+      "location": "Rua do Carmo, Lisbon",
+      "available": false
+    },
+    {
+      "id": "I56EF",
+      "location": "Praça da Figueira, Lisbon",
+      "available": true
+    },
+    {
+      "id": "J78GH",
+      "location": "Avenida da Boavista, Porto",
+      "available": false
+    },
+    {
+      "id": "K90IJ",
+      "location": "Rua de São Bento, Lisbon",
+      "available": true
+    },
+    {
+      "id": "L12KL",
+      "location": "Avenida Prof. Mário Silva, Coimbra",
+      "available": false
+    }
+  ]
