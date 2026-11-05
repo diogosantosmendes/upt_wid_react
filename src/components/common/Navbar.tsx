@@ -20,7 +20,7 @@ export default function Navbar() {
                     <span className="navbar-toggler-icon"></span>
                 </button>
 
-                <div id="navbarContent" className={`collapse navbar-collapse ${isOpen ? 'show' : ''} d-flex flex-row-reverse`}>
+                <div id="navbarContent" className={`collapse navbar-collapse ${isOpen ? 'show' : 'd-none'} d-flex flex-row-reverse`}>
                     <button className="btn btn-outline-primary" onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
                         {theme}
                     </button>

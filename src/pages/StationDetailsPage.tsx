@@ -1,34 +1,71 @@
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import type { Station } from "../types/Station";
-import jsonStations from '../assets/stations.json';
 import StationComponent from "../components/stations/StationComponent";
+import StationForm from "../components/stations/StationForm";
+import { StationService } from "../services/StationService";
 
 export default function StationDetailsPage() {
     const { id } = useParams<{ id: string }>();
     const [station, setStation] = useState<Station>();
+    const [loading, setLoading] = useState(true);
+    const [showForm, setShowForm] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const foundStation = jsonStations.find((s) => s.id === id);
-        setStation(foundStation);
+        setLoading(true);
+        if (!id) {
+            navigate('/');
+            return;
+        }
+        StationService.getById(id)
+            .then(setStation)
+            .catch(() => {
+                alert("Failed to get station details.");
+                navigate('/');
+            })
+            .finally(() => setLoading(false));
     }, [id]);
 
-    if (!station) {
-        return <div className="alert alert-danger" role="alert">
-            <h1>Station not found</h1>
-            <Link to="/" className="btn btn-primary">Back to Stations List</Link>
-        </div>
+    const onDelete = useCallback(() => {
+        navigate('/');
+    }, [navigate]);
+
+    if (loading || !station) {
+        return <div className="spinner-border"></div>;
+    }
+
+    const onFormSuccess = (updatedStation: Station) => {
+        setStation(updatedStation);
+        setShowForm(false);
     }
 
     return (
         <div className="container">
             <Link to="/" className="btn btn-primary my-3">Back to Stations List</Link>
             <StationComponent
-                available={station.available}
-                id={station.id}
-                location={station.location}
-                toggleAvailability={() => setStation(prev => ({ ...prev!, available: !prev!.available }))}
+                station={station}
+                onAvailabilityChange={setStation}
+                onDelete={onDelete}
             />
+
+            <div className="mt-3">
+                {showForm ? (
+                    <div className="card shadow-sm p-3">
+                        <div className="card-body">
+                            <h5 className="card-text">Update Station</h5>
+                            <StationForm station={station} onSuccess={onFormSuccess} />
+                        </div>
+                        <div className="card-footer">
+                            <button className="btn btn-secondary" onClick={() => setShowForm(false)}>Cancel</button>
+                        </div>
+                    </div>
+                ) : (
+                    <button className="btn btn-primary" onClick={() => setShowForm(true)}>
+                        Update Station
+                    </button>
+                )}
+            </div>
         </div>
     );
 }
