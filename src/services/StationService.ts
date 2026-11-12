@@ -1,5 +1,7 @@
-import { STATION_API_URL } from "./configs";
+import { authenticatedFetch, STATION_API_URL } from "./configs";
 import type { Station, StationForm } from "../types/Station";
+
+
 
 export const StationService = {
 
@@ -8,7 +10,7 @@ export const StationService = {
         page: number,
         size: number
     }> {
-        const res = await fetch(`${STATION_API_URL}/page?page=${page}&size=${size}`);
+        const res = await authenticatedFetch(`${STATION_API_URL}/page?page=${page}&size=${size}`);
 
         if (res.ok) {
             return res.json();
@@ -19,7 +21,7 @@ export const StationService = {
     },
 
     async getCount(): Promise<{count: number}> {
-        const res = await fetch(`${STATION_API_URL}/count`);
+        const res = await authenticatedFetch(`${STATION_API_URL}/count`);
 
         if (res.ok) {
             return res.json();
@@ -30,7 +32,7 @@ export const StationService = {
     },
 
     async getById(id: string): Promise<Station> {
-        const res = await fetch(`${STATION_API_URL}/${id}`);
+        const res = await authenticatedFetch(`${STATION_API_URL}/${id}`);
 
         if (res.ok) {
             return res.json();
@@ -41,7 +43,7 @@ export const StationService = {
     },
 
     async create(stationData: StationForm): Promise<Station> {
-        const res = await fetch(`${STATION_API_URL}`, {
+        const res = await authenticatedFetch(`${STATION_API_URL}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -59,7 +61,7 @@ export const StationService = {
 
     
     async update(id: string, stationData: StationForm): Promise<Station> {
-        const res = await fetch(`${STATION_API_URL}/${id}`, {
+        const res = await authenticatedFetch(`${STATION_API_URL}/${id}`, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json'
@@ -76,7 +78,7 @@ export const StationService = {
     },
 
     async delete(id: string): Promise<void> {
-        const res = await fetch(`${STATION_API_URL}/${id}`, {
+        const res = await authenticatedFetch(`${STATION_API_URL}/${id}`, {
             method: "DELETE",
         });
 

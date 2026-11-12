@@ -1,7 +1,28 @@
 import { GoogleLogin, GoogleOAuthProvider, type CredentialResponse } from "@react-oauth/google";
 import type { OAuthConnectionProps } from "./OAuthConnectionProps.ts";
+import type { SessionUser } from "../contexts/SessionContext.tsx";
 
-export default function GoogleCOnnection(props: OAuthConnectionProps) {
+function parseSessionUsersFromIdToken(idToken: string): SessionUser {
+    if (!idToken) {
+        throw new Error("Empty ID token received from Google.");
+    }
+    const encodedPayload = idToken.split(".")[1];
+    if (!encodedPayload) {
+        throw new Error("Invalid ID token format from Google.");
+    }
+
+    const decodedPayload = atob(encodedPayload);
+    const payload = JSON.parse(decodedPayload);
+    return {
+        sub: payload.sub,
+        provider: "google",
+        name: payload.name,
+        email: payload.email,
+        picture: payload.picture
+    };
+}
+
+export default function GoogleConnection(props: OAuthConnectionProps) {
     const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
     const handleSuccess = (response: CredentialResponse) => {
@@ -9,7 +30,9 @@ export default function GoogleCOnnection(props: OAuthConnectionProps) {
             if (!response.credential) {
                 throw new Error("No credential received from Google.");
             }
-            props.onLoginSuccess(response.credential);
+
+            const user = parseSessionUsersFromIdToken(response.credential);
+            props.onLoginSuccess(user, response.credential);
         } catch (cause) {
             props.onLoginFailure(cause instanceof Error ? cause.message : "Unknown error");
         }
@@ -23,7 +46,7 @@ export default function GoogleCOnnection(props: OAuthConnectionProps) {
 
     return (
         <GoogleOAuthProvider clientId={clientId}>
-            <div className="position-relative d-flex justify-content-center w-100">~
+            <div className="position-relative d-flex justify-content-center w-100">
                 <GoogleLogin
                     onSuccess={handleSuccess}
                     onError={() => props.onLoginFailure("Google sign-in failed. Try again later.")}

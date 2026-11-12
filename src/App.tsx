@@ -3,8 +3,16 @@ import './App.css'
 import StationsListPage from './pages/StationsListPage'
 import StationDetailsPage from './pages/StationDetailsPage'
 import Navbar from './components/common/Navbar'
+import { useSession } from './hooks/useSession'
+import LoginPage from './pages/LoginPage'
 
 function App() {
+  const { isAuthenticated } = useSession();
+
+  if(!isAuthenticated) {
+    return <LoginPage />;
+  }
+
   return (
     <div className="min-vh-100">
       <Navbar />
