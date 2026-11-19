@@ -1,75 +1,56 @@
-# React + TypeScript + Vite
+# UPT WID React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React single-page application for viewing and managing charging stations. The frontend is built with TypeScript and Vite, uses React Router for navigation, Bootstrap for styling, Google OAuth for sign-in, and the station API for authenticated data operations.
 
-Currently, two official plugins are available:
+## Getting started
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Requirements: Node.js and npm.
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```sh
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Create a `.env.local` file in the project root and provide the Google OAuth client ID:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```dotenv
+VITE_GOOGLE_CLIENT_ID=your-google-oauth-client-id
 ```
+
+The client ID is public configuration, not a secret. Never put private credentials or API secrets in `VITE_` variables because Vite exposes them to browser code.
+
+Start the development server:
+
+```sh
+npm run dev
+```
+
+## Commands
+
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start the Vite development server |
+| `npm run build` | Type-check the app and create a production build |
+| `npm run lint` | Run ESLint |
+| `npm run preview` | Preview the production build locally |
+
+## Project structure
+
+```text
+src/
+  auth/         Google OAuth integration and auth-related props
+  components/   Reusable UI, grouped by feature
+  contexts/     Session and theme providers
+  hooks/        Hooks for consuming shared contexts
+  pages/        Route-level screens
+  services/     API access and shared request configuration
+  types/        Domain and shared TypeScript types
+  assets/       Static data and assets imported by the app
+```
+
+The app is bootstrapped in `src/main.tsx`, where the session and theme providers wrap the router. `src/App.tsx` defines the authenticated application routes. Pages compose feature components; components use typed props and call services for API operations. Shared session and theme state belongs in their existing contexts and is consumed through hooks. Station API requests are centralized in `src/services/StationService.ts` and use the shared authenticated request helper in `src/services/configs.ts`.
+
+The router uses `/upt_wid_react/` as its base path. Preserve this when changing route or deployment behavior.
+
+## AI-assisted development
+
+GitHub Copilot's repository-specific guidance is in [`.github/copilot-instructions.md`](.github/copilot-instructions.md). Read it along with the relevant neighboring code before making changes.

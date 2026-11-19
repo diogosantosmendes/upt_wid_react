@@ -12,6 +12,7 @@ export default function Navbar() {
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
             <div className="container-fluid">
                 <Link className="navbar-brand" to="/">UPT WID</Link>
+                <Link className="nav-link" to="/charges">Charges</Link>
 
                 <button
                     className="navbar-toggler"
